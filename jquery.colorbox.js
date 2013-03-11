@@ -964,7 +964,14 @@
 		} else if (href) {
 			$loadingBay.load(href, settings.data, function (data, status) {
 				if (request === requests) {
-					prep(status === 'error' ? $tag(div, 'Error').html(settings.xhrError) : $(this).contents());
+					var $this = $(this);
+					if (status === 'error') {
+						prep($tag(div, 'Error').html(settings.xhrError));
+					} else if ($this.imagesLoaded) {
+						$this.imagesLoaded(function() { prep($this.contents()) });
+					} else {
+						prep($this.contents());
+					}
 				}
 			});
 		}
